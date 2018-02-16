@@ -1,12 +1,15 @@
-{
-  "1": {
-    "name": "banana",
-    "price": "2",
-    "weight": "0,2"
-  },
-  "2": {
-    "name": "orange",
-    "price": "1,5",
-    "weight": "0,3"
-  }
+{ "products": [
+    {
+      "id": 1,
+      "name": "banana",
+      "price": 2,
+      "weight": 0.2
+    },
+    {
+      "id": 2,
+      "name": "orange",
+      "price": 1.5,
+      "weight": 0.3
+    }
+  ]
 }
