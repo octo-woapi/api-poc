@@ -1,15 +1,14 @@
 const http = require('http')
-const products = require('./routes/products')
-const tools = require('./tools')
+const products = require('../products/router.js')
+const tools = require('./tools.js')
 
 const server = http.createServer((req, res) => {
-  res.writeHead(200)
-  const route = req.url.slice(req.url.indexOf('/') + 1).split('/')
+  const route = req.url.slice(req.url.indexOf('/') + 1).split('/') //créer function testable
   let last = route.slice(-1)[0]
   let params = null
   if (last.indexOf('?') >= 0) {
     params = tools.getParams(last)
-      console.log(params)
+    console.log(params)
   }
   switch (route[0]) {
     case 'products':

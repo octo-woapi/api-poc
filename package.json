@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest test/products.test.js",
+    "test": "jest test/*.test.js",
     "start": "node index.js"
   },
   "repository": {

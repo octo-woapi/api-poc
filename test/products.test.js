@@ -1,7 +1,8 @@
 const request = require('request')
-const server = require('../server.js')
-const products = require('../routes/products.js')
-const tools = require('../tools.js')
+const server = require('../server/server.js')
+const products = require('../products/router.js')
+const validator = require('../products/validator.js')
+const printer = require('../products/printer.js')
 
 const PORT = 3002
 
@@ -41,10 +42,13 @@ describe('GET /products/0', () => {
       done()
     })
   })
+  test('printer.getProduct(:id) retrieve the good product', () => {
+    expect(printer.getProduct(0)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
+  })
   test('Retrieve the first product', (done) => {
-    request.get(`http://localhost:${PORT}/products/0`, (err) => {
+    request.get(`http://localhost:${PORT}/products/0`, (err, res, body) => {
       if (err) throw err
-      expect(products.getProduct(0)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
+      expect(JSON.parse(body)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
       done()
     })
   })
@@ -58,43 +62,39 @@ describe('GET /products?sort=name', () => {
       done()
     })
   })
-  test('Sorting is working', (done) => {
+  /* test('Sorting is working', (done) => {
     const toBeSortedJSON = products.getProducts()
     const sortedJSONByPrice = { 'products': [{'id': 1, 'name': 'orange', 'price': 1.5, 'weight': 0.3}, {'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2}]}
     expect(sortedJSONByPrice).toBe(products.sortBy(toBeSortedJSON, 'price'))
-  })
+  }) */
 })
 
 describe('POST /products', () => {
-  /* test('Add data received in the JSON products', (done) => {
-    const lengthBefore = products.productsLength
-    products.addProduct('vanilla', 10, 0.01, (err, msg) => {
-      if (err) throw err
-      expect(products.productsLength).toBe(lengthBefore + 1)
+  describe('Add data received in the JSON products', () => {
+    test('Add data received in the JSON products', (done) => {
+      const lengthBefore = printer.productsLength
+      products.addProduct('vanilla', 10, 0.01, (err, msg) => {
+        if (err) throw err
+        expect(printer.getProducts().length).toBe(lengthBefore + 1)
+      })
     })
-  }) */
-  test('Data received well added in the JSON', (done) => {
-    request.post({url: `http://localhost:${PORT}/products`, form: {'name': 'vanilla', 'price': 10, 'weight': 0.01}}, (err) => {
-      if (err) throw err
-      expect(products.getProducts()[products.productsLength]).toEqual({'id': products.getProducts()[products.productsLength].id, 'name': 'vanilla', 'price': 10, 'weight': 0.01})
-      done()
-    })
-  })
-})
-
-/* describe('Catch missing arguments POST data', () => {
-  test('Catch missing arguments name in POST data', (done) => {
-    const testForm = {'price': 10, 'weight': 0.01}
-    request.post({url: `http://localhost:${PORT}/products`, form: testForm}, (err) => {
-      console.log(err)
-      expect(products.addProduct(err)).toThrow(new Error('Name of the product is undefined'))
-      done()
+    test('Data received well added in the JSON', (done) => {
+      console.log(printer.getProducts())
+      request.post({url: `http://localhost:${PORT}/products`, form: {'name': 'vanilla', 'price': 10, 'weight': 0.01}}, (err) => {
+        if (err) throw err
+        expect(printer.getProducts()[printer.productsLength]).toEqual({'id': printer.getProducts()[products.productsLength], 'name': 'vanilla', 'price': 10, 'weight': 0.01})
+        done()
+      })
     })
   })
-}) */
-
-describe('Check that error handling works correctly', () => {
-  test('Check that error handling works correctly', () => {
-    expect(tools.connerieThrowException).toThrow(new Error('test Exception'))
+  describe('Catch missing arguments POST data', () => {
+    test('When name is undefined', (done) => {
+      const testForm = {'price': 10, 'weight': 0.01}
+      request.post({url: `http://localhost:${PORT}/products`, form: testForm}, (err, res) => {
+        if (err) throw err
+        expect(res.statusCode).toEqual(400)
+        done()
+      })
+    })
   })
 })

@@ -1,6 +1,6 @@
 const fs = require('fs')
 
-const productsJSON = JSON.parse(fs.readFileSync('./data/products.json', 'utf8'))
+const productsJSON = JSON.parse(fs.readFileSync('./products/data.json', 'utf8'))
 const products = productsJSON.products
 
 module.exports = {
