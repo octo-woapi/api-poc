@@ -1,8 +1,6 @@
 const request = require('request')
 const server = require('../server/server.js')
-const products = require('../products/router.js')
-const validator = require('../products/validator.js')
-const printer = require('../products/printer.js')
+const printer = require('../products/getData.js')
 
 const PORT = 3002
 
@@ -68,26 +66,7 @@ describe('GET /products?sort=name', () => {
     expect(sortedJSONByPrice).toBe(products.sortBy(toBeSortedJSON, 'price'))
   }) */
 })
-
-describe('POST /products', () => {
-  describe('Add data received in the JSON products', () => {
-    test('Add data received in the JSON products', (done) => {
-      const lengthBefore = printer.productsLength
-      products.addProduct('vanilla', 10, 0.01, (err, msg) => {
-        if (err) throw err
-        expect(printer.getProducts().length).toBe(lengthBefore + 1)
-      })
-    })
-    test('Data received well added in the JSON', (done) => {
-      console.log(printer.getProducts())
-      request.post({url: `http://localhost:${PORT}/products`, form: {'name': 'vanilla', 'price': 10, 'weight': 0.01}}, (err) => {
-        if (err) throw err
-        expect(printer.getProducts()[printer.productsLength]).toEqual({'id': printer.getProducts()[products.productsLength], 'name': 'vanilla', 'price': 10, 'weight': 0.01})
-        done()
-      })
-    })
-  })
-  describe('Catch missing arguments POST data', () => {
+/*  describe('Catch missing arguments POST data', () => {
     test('When name is undefined', (done) => {
       const testForm = {'price': 10, 'weight': 0.01}
       request.post({url: `http://localhost:${PORT}/products`, form: testForm}, (err, res) => {
@@ -97,4 +76,4 @@ describe('POST /products', () => {
       })
     })
   })
-})
+}) */

@@ -9,32 +9,37 @@ function isQueryParams (params) {
 }
 
 function isValidId (id) {
-  if (typeof id !== 'number') {
-    return false
-  } else {
-    return true
-  }
+  return typeof id === 'number'
 }
 
 class InvalidNameError extends Error {}
 
-function validateInputs (inputs) {
-  if (typeof inputs.name === 'undefined' || !inputs.name) {
+function isNameDefined (inputs) {
+  if (!inputs.name) {
     throw new InvalidNameError('Name of the product is undefined')
-  } else {
-    if (typeof inputs.price === 'undefined' || !inputs.price) {
-      inputs.price = 0
-    }
-    if (typeof inputs.weight === 'undefined' || !inputs.weight) {
-      inputs.weight = 0
-    }
-    return inputs
   }
+}
+
+const DEFAULT_PRICE = 0
+
+function formatInputs (inputs) {
+  if (!inputs.price) {
+    inputs.price = DEFAULT_PRICE
+  } else {
+    inputs.price = parseFloat(inputs.price)
+  }
+  if (!inputs.weight) {
+    inputs.weight = DEFAULT_PRICE
+  } else {
+    inputs.weight = parseFloat(inputs.weight)
+  }
+  return inputs
 }
 
 module.exports = {
   isQueryParams,
   isValidId,
-  InvalidNameError: InvalidNameError,
-  validateInputs
+  InvalidNameError,
+  formatInputs,
+  isNameDefined
 }

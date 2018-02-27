@@ -1,20 +1,35 @@
 const validator = require('../products/validator')
 
-describe('.validateInputs(:inputs)', () => {
-  describe('When input.name is undefined', () => {
+describe('.isNameDefined(:inputs)', () => {
+  describe('When inputs.name is undefined', () => {
     test('throws an exception', () => {
       // Given
       const data = {}
 
       // When
       expect(() => {
-        validator.validateInputs(data)
+        validator.isNameDefined(data)
       }).toThrow(validator.InvalidNameError)
     })
   })
 })
 
-describe('.validateParams(:params)', () => {
+describe('.formatInputs', () => {
+  describe('When price is undefined', () => {
+    test('return price equal to 0', () => {
+      const data = {}
+      expect(validator.formatInputs(data)).toEqual({'price': 0, 'weight': 0})
+    })
+  })
+  describe('When price is defined', () => {
+    test('return price equal to 0', () => {
+      const data = {'price': 22.3}
+      expect(validator.formatInputs(data)).toEqual({'price': 22.3, 'weight': 0})
+    })
+  })
+})
+
+describe('.isQueryParams(:params)', () => {
   describe('When params is undefined', () => {
     test('return false', () => {
       const params = undefined
