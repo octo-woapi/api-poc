@@ -16,7 +16,7 @@ function main (req, res, route, params) {
       return res.end(JSON.stringify(product))
     }
     if (validator.isQueryParams(params)) {
-      sort(params)
+      return res.end(sort.sort(params))
     } else {
       console.log('test')
     }

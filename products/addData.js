@@ -1,6 +1,8 @@
 const printer = require('./getData')
 const validator = require('./validator')
 const tools = require('../server/tools')
+const fileHandler = require('../server/fileHandler')
+
 const env = process.env.NODE_ENV || 'development'
 const conf = require('../server/conf')[env]
 
@@ -25,27 +27,27 @@ function getData (req, callback) {
   })
 }
 
-function addProduct (json, callback, fileHandler) {
+function addProduct (json, callback) {
   // try catch
   try {
     validator.isNameDefined(json)
+    const jsonFormatted = validator.formatInputs(json)
+    const productsList = printer.getProducts()
+    const lastId = productsList[productsList.length - 1].id
+    const newId = lastId + 1
+    productsList.push({
+      'id': newId,
+      'name': jsonFormatted.name,
+      'price': jsonFormatted.price,
+      'weight': jsonFormatted.weight
+    })
+    fileHandler.write(conf.data.products, '{"products": ' + JSON.stringify(productsList) + '}', (err) => {
+      if (err) throw err
+      callback(null, productsList)
+    })
   } catch (InvalidNameError) {
     callback(InvalidNameError)
   }
-  const jsonFormatted = validator.formatInputs(json)
-  const productsList = printer.getProducts()
-  const lastId = productsList[productsList.length - 1].id
-  const newId = lastId + 1
-  productsList.push({
-    'id': newId,
-    'name': jsonFormatted.name,
-    'price': jsonFormatted.price,
-    'weight': jsonFormatted.weight
-  })
-  fileHandler.write(conf.data.products, '{"products": ' + JSON.stringify(productsList) + '}', (err) => {
-    if (err) throw err
-    callback(null, productsList)
-  })
 }
 
 module.exports = {

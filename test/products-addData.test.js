@@ -11,6 +11,14 @@ describe('.addProduct(:inputs)', () => {
         done()
       })
     })
+    test('I don‘t add something in data-development.json', (done) => {
+      const data = {}
+      const lastIdBefore = getData.getProducts()[0].id
+      addData.addProduct(data, () => {
+        expect(getData.getProducts()[0].id).toEqual(lastIdBefore)
+        done()
+      })
+    })
   })
   /* describe('When everything fine', () => {
     test.only('Product added is the last product in the list', () => {

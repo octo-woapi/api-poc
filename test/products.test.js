@@ -1,6 +1,6 @@
 const request = require('request')
 const server = require('../server/server.js')
-const printer = require('../products/getData.js')
+const getData = require('../products/getData.js')
 
 const PORT = 3002
 
@@ -40,8 +40,8 @@ describe('GET /products/0', () => {
       done()
     })
   })
-  test('printer.getProduct(:id) retrieve the good product', () => {
-    expect(printer.getProduct(0)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
+  test('getData.getProduct(:id) retrieve the good product', () => {
+    expect(getData.getProduct(0)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
   })
   test('Retrieve the first product', (done) => {
     request.get(`http://localhost:${PORT}/products/0`, (err, res, body) => {
@@ -60,10 +60,12 @@ describe('GET /products?sort=name', () => {
       done()
     })
   })
-  /* test('Sorting is working', (done) => {
-    const toBeSortedJSON = products.getProducts()
-    const sortedJSONByPrice = { 'products': [{'id': 1, 'name': 'orange', 'price': 1.5, 'weight': 0.3}, {'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2}]}
-    expect(sortedJSONByPrice).toBe(products.sortBy(toBeSortedJSON, 'price'))
+  /* test('getParams is getting all the params', (done) => {
+    request.get(`http://localhost:${PORT}/products?sort=price`, (err, res) => {
+      if (err) throw err
+      expect(res.query).toBe('{sort:"price"}')
+      done()
+    })
   }) */
 })
 /*  describe('Catch missing arguments POST data', () => {

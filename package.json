@@ -27,5 +27,9 @@
     "eslint-plugin-standard": "^3.0.1",
     "jest": "^22.2.2",
     "request": "^2.83.0"
+  },
+  "jest": {
+    "verbose": true,
+    "bail": true
   }
 }
