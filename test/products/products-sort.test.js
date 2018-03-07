@@ -1,5 +1,5 @@
-const sort = require('../products/sort')
-const getData = require('../products/getData')
+const sort = require('../../products/sort')
+const getData = require('../../products/get')
 
 describe('.dynamicSort(:property)', () => {
   describe('Products is fine, sorting by price products', () => {

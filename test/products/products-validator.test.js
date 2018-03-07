@@ -1,4 +1,4 @@
-const validator = require('../products/validator')
+const validator = require('../../products/validator')
 
 describe('.isNameDefined(:inputs)', () => {
   describe('When inputs.name is undefined', () => {

@@ -1,7 +1,9 @@
-function main (orderId, orderData, alreadyExists, update, fileHandler) {
-  if (alreadyExists(orderId)) {
-    return update(orderId, orderData, fileHandler)
+function updateAndCreate (orderId, orderData, alreadyExist, update, add, fileHandlers) {
+  const orders = fileHandlers.orders.read().orders
+  if (alreadyExist(orderId, orders)) {
+    return update(orderId, orderData, fileHandlers)
   }
+  return add(orderId, orderData, fileHandlers)
 }
 
-module.exports = main
+module.exports = updateAndCreate

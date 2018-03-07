@@ -14,7 +14,7 @@ const server = http.createServer((req, res) => {
       products.main(req, res, route, params)
       break
     case 'orders':
-      orders.main(req, res, route, params)
+      orders(req, res)
       break
     default:
       res.write('Hello world')

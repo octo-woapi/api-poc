@@ -1,4 +1,4 @@
-const printer = require('./getData')
+const printer = require('./get')
 const validator = require('./validator')
 const tools = require('../server/tools')
 const fileHandler = require('../server/fileHandler')
@@ -32,7 +32,7 @@ function addProduct (json, callback) {
   try {
     validator.isNameDefined(json)
     const jsonFormatted = validator.formatInputs(json)
-    const productsList = printer.getProducts()
+    const productsList = printer.getList(fileHandler)
     const lastId = productsList[productsList.length - 1].id
     const newId = lastId + 1
     productsList.push({

@@ -1,6 +1,6 @@
-const addData = require('../products/addData')
-const validator = require('../products/validator')
-const getData = require('../products/getData')
+const addData = require('../../products/addData')
+const validator = require('../../products/validator')
+const getData = require('../../products/get')
 
 describe('.addProduct(:inputs)', () => {
   describe('When name is undefined', () => {

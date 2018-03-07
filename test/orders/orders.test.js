@@ -1,5 +1,5 @@
 const request = require('request')
-const server = require('../server/server.js')
+const server = require('../../server/server.js')
 
 const PORT = 3002
 

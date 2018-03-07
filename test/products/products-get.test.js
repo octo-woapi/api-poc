@@ -1,31 +1,31 @@
-const getData = require('../products/getData.js')
+const get = require('../../products/get.js')
 const fs = require('fs')
 const env = process.env.NODE_ENV || 'development'
-const conf = require('../server/conf')[env]
+const conf = require('../../server/conf')[env]
 
 const productsJSON = JSON.parse(fs.readFileSync(conf.data.products, 'utf8'))
 const products = productsJSON.products
 
-describe('.getProducts()', () => {
+describe('.getList()', () => {
   describe('When everything is fine', () => {
     test('return products', () => {
-      expect(products).toEqual(getData.getProducts())
+      expect(products).toEqual(get.getList())
     })
   })
 })
 
-describe('.getProduct(:id)', () => {
+describe('.getById(:id)', () => {
   describe('When everything fine', () => {
     test('return JSON', () => {
-      expect(products[0]).toEqual(getData.getProduct(0))
+      expect(products[0]).toEqual(get.getById(0))
     })
   })
   describe('When id is undefined', () => {
     test('throw invalidArgumentError', () => {
       const id = undefined
       expect(() => {
-        getData.getProduct(id)
-      }).toThrow(getData.InvalidArgumentError)
+        get.getById(id)
+      }).toThrow(get.InvalidArgumentError)
     })
   })
 })
