@@ -1,8 +1,8 @@
 const router = require('../../orders/router')
-const validator = require('../../orders/alreadyExist')
-const update = require('../../orders/update')
-const add = require('../../orders/add')
-const getList = require('../../orders/get')
+const validator = require('../../orders/validator/alreadyExist')
+const update = require('../../orders/usecase/update')
+const add = require('../../orders/usecase/add')
+const getList = require('../../orders/usecase/getList')
 
 describe('router(:req, :res)', () => {
   describe('When request method is PUT', () => {
@@ -16,7 +16,7 @@ describe('router(:req, :res)', () => {
       // Then
       expect(updateOrCreate).toBeCalled()
     })
-    let updateOrCreate = require('../../orders/updateAndCreate')
+    let updateOrCreate = require('../../orders/usecase/updateAndCreate')
     it('returns orders updated when id already exist', () => {
       const orderId = 1
       const orderData = 'fake data'

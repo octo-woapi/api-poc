@@ -1,4 +1,4 @@
-const updateOrCreate = require('../../orders/updateAndCreate')
+const updateOrCreate = require('../../../orders/usecase/updateAndCreate')
 
 describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, :filHandler)', () => {
   describe('When id already exists', () => {

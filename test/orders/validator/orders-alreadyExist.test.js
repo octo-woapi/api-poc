@@ -1,4 +1,4 @@
-const validator = require('../../orders/alreadyExist')
+const validator = require('../../../orders/validator/alreadyExist')
 
 describe(':alreadyExist(:orderId, :orders', () => {
   describe('When an order with orderId already exist', () => {

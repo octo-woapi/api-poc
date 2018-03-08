@@ -1,9 +1,9 @@
-const validator = require('./alreadyExist')
-const add = require('./add')
-const update = require('./update')
+const validator = require('./validator/alreadyExist')
+const add = require('./usecase/add')
+const update = require('./usecase/update')
 const fileHandler = require('../server/fileHandler')
-const get = require('./get')
-const updateOrCreate = require('./updateAndCreate')
+const get = require('./usecase/getList')
+const updateOrCreate = require('./usecase/updateAndCreate')
 
 const env = process.env.NODE_ENV || 'development'
 const conf = require('../server/conf')[env]

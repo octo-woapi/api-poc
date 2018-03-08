@@ -1,10 +1,5 @@
-function getList (fileHandlers) {
-  const orders = fileHandlers.orders.read().orders
-  return orders
-}
-
-function getById (id, fileHandlers) {
-  const orders = fileHandlers.orders.read().orders
+function getById (fileHandler, id) {
+  const orders = fileHandler.read().orders
   if (!orders.find((order) => order.id === id)) {
     throw new OrderNotFoundError(`Order with ID:${id} does not exist`)
   }
@@ -14,7 +9,6 @@ function getById (id, fileHandlers) {
 class OrderNotFoundError extends Error {}
 
 module.exports = {
-  getList,
   getById,
   OrderNotFoundError
 }
