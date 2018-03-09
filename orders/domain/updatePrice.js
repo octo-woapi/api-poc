@@ -9,7 +9,6 @@ function updatePrice (order, getProductById, fileHandlers,
     productPrice += productInfo.price * order.productsList[productKey].quantity
   }
   order.shipmentAmount = calculateShippingAmount(order.weight)
-  console.log(productPrice + order.shipmentAmount)
   order.totalAmount = applyDiscount(productPrice + order.shipmentAmount)
   return order
 }

@@ -1,9 +1,15 @@
-function updateAndCreate (orderId, orderData, alreadyExist, update, add, fileHandlers) {
+function updateOrCreate (orderId, orderData, isValidOrder, alreadyExist, update, add, fileHandlers, format, updateListPrice) {
   const orders = fileHandlers.orders.read().orders
-  if (alreadyExist(orderId, orders)) {
-    return update(orderId, orderData, fileHandlers)
+  if (!isValidOrder(orderData)) {
+    throw new InvalidOrderFormatError('Missing id and/or productsList in the order')
   }
-  return add(orderId, orderData, fileHandlers)
+  orderData = format(orderData)
+  if (alreadyExist(orderId, orders)) {
+    return updateListPrice(update(orderId, orderData, fileHandlers))
+  }
+  return updateListPrice(add(orderId, orderData, fileHandlers))
 }
 
-module.exports = updateAndCreate
+class InvalidOrderFormatError extends Error {}
+
+module.exports = updateOrCreate
