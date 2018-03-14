@@ -1,7 +1,16 @@
-function isValidOrder (orderData) {
-  if (!orderData.id && !orderData.productsList) return false
-  if (!Array.isArray(orderData.productsList)) return false
-  return true
+function isValidOrder (newOrder) {
+  const AUTHORIZED_STATUS = ['pending', 'cancel', 'paid']
+  if (newOrder && newOrder.id && newOrder.productsList &&
+    Array.isArray(newOrder.productsList)) {
+    if (newOrder.status) {
+      if (AUTHORIZED_STATUS.indexOf(newOrder.status.toLowerCase()) > -1) {
+        return true
+      }
+      return false
+    }
+    return true
+  }
+  return false
 }
 
 module.exports = isValidOrder

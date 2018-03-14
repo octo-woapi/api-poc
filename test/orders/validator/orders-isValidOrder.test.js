@@ -3,7 +3,7 @@ const isValidOrder = require('../../../orders/validator/isValidOrder')
 describe('isValidOrder(:orderData)', () => {
   describe('when orderData.id or orderData.productsList is undefined', () => {
     it('returns false', () => {
-      const orderData = {}
+      const orderData = undefined
       expect(isValidOrder(orderData)).toBe(false)
     })
   })
@@ -16,14 +16,16 @@ describe('isValidOrder(:orderData)', () => {
       expect(isValidOrder(orderData)).toBe(false)
     })
   })
+  describe('when orderData.status is different of pending, cancel or paid', () => {
+    it('returns false', () => {
+      const orderData = {id: 1, productsList: [], status: 'fake'}
+      expect(isValidOrder(orderData)).toBe(false)
+    })
+  })
   describe('when everything is fine', () => {
     it('returns true', () => {
-      const orderData = {
-        id: 1,
-        productsList: []
-      }
+      const orderData = {'id': 1, 'productsList': []}
       expect(isValidOrder(orderData)).toBe(true)
     })
   })
-
 })

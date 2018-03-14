@@ -1,8 +1,14 @@
-function addData (orderId, orderData, fileHandlers) {
-  const orders = fileHandlers.orders.read().orders
-  orders.push({id: orderId, value: orderData})
-  fileHandlers.orders.write({orders: orders})
-  return orders
+function add (fileHandler) {
+  return (orderId, orderData) => {
+    const orders = fileHandler.read().orders
+    orders.push(JSON.parse(orderData))
+    fileHandler.write({orders: orders})
+    return orders
+  }
 }
 
-module.exports = addData
+module.exports = (fileHandler) => {
+  return {
+    add: add(fileHandler)
+  }
+}

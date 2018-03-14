@@ -9,7 +9,7 @@ describe('getList(:fileHandlers, :getById, :orderId)', () => {
     })
     it('returns orders', () => {
       const fileHandlers = {orders: {read: jest.fn(() => { return { orders: [] } })}}
-      const returnOrders = getList(fileHandlers.orders)
+      const returnOrders = getList(fileHandlers.orders).getList
       expect(returnOrders).toEqual([])
     })
   })

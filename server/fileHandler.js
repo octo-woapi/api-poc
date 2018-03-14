@@ -17,7 +17,7 @@ function read (path) {
       return JSON.parse(fs.readFileSync(path, 'utf8'))
     } catch (err) {
       if (err.code === 'ENOENT') {
-        throw new FileNotFoundError('File not found')
+        throw new FileNotFoundError('File not found: ')
       } else {
         throw err
       }

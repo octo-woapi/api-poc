@@ -1,10 +1,10 @@
-function update (fileHandler) {
-  return (orderId, orderData) => {
+function deleteOrder (fileHandler) {
+  return (id) => {
     const orders = fileHandler.read().orders
     const orderIndex = orders.findIndex((order) => {
-      return order.id === parseInt(orderId)
+      return order.id === parseInt(id)
     })
-    orders[orderIndex] = JSON.parse(orderData)
+    orders.splice(orderIndex, 1)
     fileHandler.write({orders: orders})
     return orders
   }
@@ -12,6 +12,6 @@ function update (fileHandler) {
 
 module.exports = (fileHandler) => {
   return {
-    update: update(fileHandler)
+    deleteOrder: deleteOrder(fileHandler)
   }
 }

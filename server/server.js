@@ -9,17 +9,19 @@ const server = http.createServer((req, res) => {
     params = tools.getParams(url)
   }
   route = tools.getRoute(url)
-  switch (route[0]) {
+  const ressource = route[0]
+  const id = parseInt(route[1])
+  switch (ressource) {
     case 'products':
-      products.main(req, res, route, params)
+      products(req, res, route, params)
       break
     case 'orders':
-      orders(req, res)
+      orders(req, res, route, id)
       break
     default:
       res.write('Hello world')
+      res.end()
   }
-  res.end()
 })
 
 module.exports = server

@@ -3,17 +3,18 @@ const fileHandler = require('../../server/fileHandler')
 describe(':read(:pathData)', () => {
   describe('When everything fine', () => {
     it('returns JSON from data path', () => {
-      const path = '/Users/romaincalamier/api-poc/products/data-development.json'
-      const json = fileHandler.read(path)
-      expect(json).toBeDefined()
+      const path = '/Users/romaincalamier/api-poc/products/data-test.json'
+      const {read} = fileHandler(path)
+      expect(read).toBeDefined()
     })
   })
   describe('When the file is not existing', () => {
     it('returns file not found error', () => {
       const path = '../fakedata.json'
+      const {read, FileNotFoundError} = fileHandler(path)
       expect(() => {
-        fileHandler.read(path)
-      }).toThrow(new fileHandler.FileNotFoundError('File not found'))
+        read()
+      }).toThrow(FileNotFoundError)
     })
   })
 })

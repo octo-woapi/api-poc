@@ -1,18 +1,22 @@
-const validator = require('../../../orders/validator/alreadyExist')
+const alreadyExistModule = require('../../../orders/validator/alreadyExist')
 
-describe(':alreadyExist(:orderId, :orders', () => {
+describe(':alreadyExist(:fileHandler, :orderId)', () => {
   describe('When an order with orderId already exist', () => {
     it('return true', () => {
       const orderId = 1
-      const orders = [{id: 1}]
-      expect(validator.alreadyExist(orderId, orders)).toBe(true)
+      const orders = [{id: 1, productsList: []}]
+      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: orders} })}}
+      const {alreadyExist} = alreadyExistModule(fileHandlers.orders)
+      expect(alreadyExist(orderId)).toBe(true)
     })
   })
   describe('When an order with orderId doesn\'t exist', () => {
     it('return false', () => {
       const orderId = 2
       const orders = [{id: 1}]
-      expect(validator.alreadyExist(orderId, orders)).toBe(false)
+      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: orders} })}}
+      const {alreadyExist} = alreadyExistModule(fileHandlers.orders)
+      expect(alreadyExist(orderId)).toBe(false)
     })
   })
 })

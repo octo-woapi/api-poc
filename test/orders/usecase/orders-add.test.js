@@ -1,21 +1,20 @@
-const add = require('../../../orders/usecase/add')
+const fileHandlers = {orders: {read: jest.fn(() => { return {orders: []} }),
+  write: jest.fn()}}
 
-describe(':add(orderId, orderData, orders, fileHandlers)', () => {
+const {add} = require('../../../orders/usecase/add')(fileHandlers.orders)
+
+describe(':add(orderId, orderData, orders)', () => {
   describe('When everything fine', () => {
     it('calls fileHandlers.write', () => {
       const orderId = 1
-      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: []} }),
-        write: jest.fn()}}
-      add(orderId, {}, fileHandlers)
+      add(orderId, '{}')
       expect(fileHandlers.orders.write).toBeCalled()
     })
     it('returns orders updated', () => {
       const orderId = 1
-      const orderData = 'fake data'
-      const orders = [{id: orderId, value: orderData}]
-      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: []} }),
-        write: jest.fn()}}
-      expect(add(orderId, orderData, fileHandlers)).toEqual(orders)
+      const orderData = '{}'
+      const orders = [JSON.parse(orderData)]
+      expect(add(orderId, orderData)).toEqual(orders)
     })
   })
 })
