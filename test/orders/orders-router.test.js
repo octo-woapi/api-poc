@@ -13,14 +13,14 @@ afterAll(() => {
 
 describe('PUT /orders/1', () => {
   describe('When the order id is not precise', () => {
-    it('returns 500', (done) => {
+    it('returns 400', (done) => {
       request({url: `http://localhost:${PORT}/orders`, method: 'PUT', json: {id: 1, productsList: []}}, (err, res) => {
         if (err) console.log(err)
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(400)
         done()
       })
     })
-    it('returns an id invalid error', (done) => {
+    it('returns an invalid id error', (done) => {
       request({url: `http://localhost:${PORT}/orders`, method: 'PUT', json: {id: 1, productsList: []}}, (err, res) => {
         if (err) console.log(err)
         expect(res.body).toBe('ID undefined can not PUT data')
@@ -28,11 +28,11 @@ describe('PUT /orders/1', () => {
       })
     })
   })
-  describe('When the order sent does not respect the format wanted', () => {
-    it('returns 500', (done) => {
+  describe('When the sent order does not respect the expected format', () => {
+    it('returns 400', (done) => {
       request({url: `http://localhost:${PORT}/orders/1`, method: 'PUT', json: {data: 'fake data'}}, (err, res) => {
         if (err) console.log(err)
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(400)
         done()
       })
     })
@@ -60,20 +60,50 @@ describe('PUT /orders/1', () => {
   })
 })
 
+const fs = require('fs')
+
 describe('POST /orders', () => {
   describe('when the format of the orderData is invalid', () => {
-    it('returns 500', (done) => {
+    it('returns 400', (done) => {
       request({url: `http://localhost:${PORT}/orders/1`, method: 'POST', json: {data: 'fake data'}}, (err, res) => {
         if (err) console.log(err)
-        expect(res.body).toBe('Invalid format Error: id and products must be defined ' +
-          'and status can only be pending, paid or cancel')
+        expect(res.statusCode).toBe(400)
         done()
       })
     })
   })
+  describe('when everything is fine', () => {
+    it('returns 200', (done) => {
+      request({
+        url: `http://localhost:${PORT}/orders/1`,
+        method: 'POST',
+        json: {productsList: []}
+      }, (err, res) => {
+        if (err) console.log(err)
+        expect(res.statusCode).toBe(200)
+        done()
+      })
+    })
+    it('adds the product in the list', (done) => {
+      request({
+        url: `http://localhost:${PORT}/orders/1`,
+        method: 'POST',
+        json: {productsList: [{id: 1, name: 'fake data post'}]}
+      }, (err, res) => {
+        if (err) console.log(err)
+        console.log(res.body.getList)
+        expect(res.body.getList).toBe(JSON.stringify(fs.readFileSync('/Users/' +
+          'romaincalamier/api-poc/orders/data/test.json', 'utf-8')).orders)
+        fs.writeFile('/Users/romaincalamier/api-poc/orders/data/test.json',
+          JSON.stringify({orders: [{id: 1, productsList: []}]}), (err) => {
+            if (err) throw err
+            console.log('data-test rewrite')
+            done()
+          })
+      })
+    })
+  })
 })
-
-const fs = require('fs')
 
 describe('GET /orders', () => {
   describe('when everything is fine', () => {
@@ -121,13 +151,14 @@ describe('DELETE /orders/1', () => {
     it('deletes the order wanted', (done) => {
       request({url: `http://localhost:${PORT}/orders/1`, method: 'DELETE'}, (err, res) => {
         if (err) console.log(err)
+        console.log()
         expect(JSON.parse(fs.readFileSync('/Users/' +
           'romaincalamier/api-poc/orders/data/test.json', 'utf-8')).orders).toEqual([])
         done()
         fs.writeFile('/Users/romaincalamier/api-poc/orders/data/test.json',
           JSON.stringify({orders: [{id: 1, productsList: []}]}), (err) => {
             if (err) throw err
-            console.log('Saved!')
+            console.log('data-test rewrite')
           })
       })
     })

@@ -1,11 +1,11 @@
-const updatePriceList = require('../../../orders/domain/updatePriceList')
+const updateTotalsList = require('../../../orders/domain/updateTotalsList')
 
-describe('updatePriceList(:orders, :getProductById)', () => {
+describe('updateTotalsList(:orders, :getProductById)', () => {
   describe('when orders is empty', () => {
     it('returns orders', () => {
       const orders = []
       const getProductById = jest.fn()
-      expect(updatePriceList(orders, getProductById)).toBe(orders)
+      expect(updateTotalsList(orders, getProductById)).toBe(orders)
     })
   })
 })

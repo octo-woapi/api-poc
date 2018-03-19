@@ -1,1 +1,8 @@
-{"orders":[{"id":1,"productsList":[]}]}
+{
+  "orders": [
+    {
+      "id": 1,
+      "productsList": []
+    }
+  ]
+}

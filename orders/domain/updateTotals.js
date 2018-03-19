@@ -1,4 +1,4 @@
-function updatePrice (order, getProductById) {
+function updateTotals (order, getProductById) {
   if (order.productsList.length < 1) {
     return order
   }
@@ -32,4 +32,4 @@ function applyDiscount (price) {
   return price - price * DISCOUNT
 }
 
-module.exports = updatePrice
+module.exports = updateTotals

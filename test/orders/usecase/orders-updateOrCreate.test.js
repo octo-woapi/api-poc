@@ -1,7 +1,7 @@
 const {updateOrCreate, InvalidOrderFormatError} = require('../../../orders/usecase/updateAndCreate')
 
 describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
-  ':filHandlers, :format, :updatePriceList)', () => {
+  ':filHandlers, :format, :updateTotalsList)', () => {
   describe('when everything is fine', () => {
     it('calls format with orderData', () => {
       const orderId = 1
@@ -12,12 +12,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn()
       const format = jest.fn()
       const getProductById = jest.fn()
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update, add,
-        format, updatePriceList, getProductById)
+        format, updateTotalsList, getProductById)
       expect(format).toBeCalledWith(orderData)
     })
-    it('calls updatePriceList with updated orders', () => {
+    it('calls updateTotalsList with updated orders', () => {
       const orderId = 1
       const orderData = '{}'
       const orderDataUpdated = 'updated fake data'
@@ -27,10 +27,10 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn()
       const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update, add,
-        format, updatePriceList, getProductById)
-      expect(updatePriceList).toBeCalledWith(orderDataUpdated, getProductById)
+        format, updateTotalsList, getProductById)
+      expect(updateTotalsList).toBeCalledWith(orderDataUpdated, getProductById)
     })
   })
   describe('When id already exists', () => {
@@ -42,11 +42,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const update = jest.fn()
       const add = jest.fn()
       const format = jest.fn()
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => true)
       // When
       updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update, add,
-        format, updatePriceList, getProductById)
+        format, updateTotalsList, getProductById)
       // Then
       expect(alreadyExist).toBeCalledWith(orderId)
     })
@@ -58,11 +58,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn()
       const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => true)
       // When
       updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update, add,
-        format, updatePriceList, getProductById)
+        format, updateTotalsList, getProductById)
       // Then
       expect(update).toBeCalledWith(orderId, orderData)
     })
@@ -75,11 +75,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn()
       const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
-      const updatePriceList = jest.fn(() => [orderDataUpdated])
+      const updateTotalsList = jest.fn(() => [orderDataUpdated])
       const isValidOrder = jest.fn(() => true)
       // When
       const orders = updateOrCreate(orderId, orderData, isValidOrder, alreadyExist,
-        update, add, format, updatePriceList, getProductById)
+        update, add, format, updateTotalsList, getProductById)
       // Then
       expect(orders).toEqual([orderDataUpdated])
     })
@@ -93,11 +93,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const update = jest.fn()
       const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => true)
       // When
       updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update,
-        add, format, updatePriceList, getProductById)
+        add, format, updateTotalsList, getProductById)
       // Then
       expect(add).toBeCalledWith(orderId, orderData)
     })
@@ -109,11 +109,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn(() => 'fake updated order')
       const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
-      const updatePriceList = jest.fn(() => 'fake updated order')
+      const updateTotalsList = jest.fn(() => 'fake updated order')
       const isValidOrder = jest.fn(() => true)
       // When
       const order = updateOrCreate(orderId, orderData, isValidOrder, alreadyExist,
-        update, add, format, updatePriceList, getProductById)
+        update, add, format, updateTotalsList, getProductById)
       // Then
       expect(order).toEqual('fake updated order')
     })
@@ -127,11 +127,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const add = jest.fn()
       const getProductById = jest.fn()
       const format = jest.fn()
-      const updatePriceList = jest.fn()
+      const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => false)
       expect(() => {
         updateOrCreate(orderId, orderData, isValidOrder, alreadyExist, update, add,
-          format, updatePriceList, getProductById)
+          format, updateTotalsList, getProductById)
       }).toThrow(InvalidOrderFormatError)
     })
   })
