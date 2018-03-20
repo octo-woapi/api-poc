@@ -22,47 +22,30 @@ const getProductById = require('../products/usecase/getById')(fileHandlers.produ
 const {deleteOrder} = require('./usecase/deleteOrder')(fileHandlers.orders)
 
 function router (req, res, route, id) {
-  if (req.method === 'PUT') {
-    if (isValidId(id)) {
-      getData(req, (errGetData, requestData) => {
-        if (errGetData) {
-          res.writeHead(400)
-          res.end()
-        }
-        try {
-          const updatedOrders = updateOrCreate(id, requestData, isValidOrder, alreadyExist,
-            update, add, format, updateTotalsList, getProductById)
-          res.statusCode = 200
-          res.end(JSON.stringify(updatedOrders))
-        } catch (errUpdate) {
-          console.log(errUpdate)
-          if (errUpdate instanceof InvalidOrderFormatError) {
-            res.statusCode = 400
-            res.end('Invalid format Error: id and products must be defined and status can only ' +
-              'be pending, paid or cancel')
-          }
-        }
-      })
-    } else {
-      res.statusCode = 400
-      res.end('ID undefined can not PUT data')
-    }
-  }
-  if (req.method === 'POST') {
+  if (req.method === 'PUT' || req.method === 'POST') {
     getData(req, (errGetData, requestData) => {
       if (errGetData) {
-        res.writeHead(500)
+        res.writeHead(400)
         res.end()
       }
-      let id = 1
-      while (alreadyExist(id)) { id += 1 }
+
+      if (req.method === 'PUT') {
+        if (!isValidId(id)) {
+          res.statusCode = 400
+          res.end('ID undefined can not PUT data')
+        }
+      } else {
+        id = 1
+        while (alreadyExist(id)) {
+          id += 1
+        }
+      }
       try {
-        const updatedOrders = updateOrCreate(id, JSON.parse(requestData), isValidOrder, alreadyExist,
-          update, add, format, updateTotalsList, getProductById.getById)
+        const updatedOrders = updateOrCreate(id, requestData, isValidOrder, alreadyExist,
+          update, add, format, updateTotalsList, getProductById)
         res.statusCode = 200
         res.end(JSON.stringify(updatedOrders))
       } catch (errUpdate) {
-        console.log(errUpdate)
         if (errUpdate instanceof InvalidOrderFormatError) {
           res.statusCode = 400
           res.end('Invalid format Error: id and products must be defined and status can only ' +

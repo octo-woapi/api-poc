@@ -1,4 +1,4 @@
-const tools = require('../../server/tools')
+const tools = require('../../server/tools/url')
 
 describe('.getRoute(:url)', () => {
   describe('When url is undefined', () => {

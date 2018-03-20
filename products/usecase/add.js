@@ -1,18 +1,13 @@
 function add (fileHandler) {
-  return (json, validator) => {
-    validator.isNameDefined(json)
-    const jsonFormatted = validator.formatInputs(json)
+  return (newId, inputs) => {
     const productsList = fileHandler.read().products
-    let lastId = -1
-    if (productsList.length > 0) lastId = productsList[productsList.length - 1].id
-    const newId = lastId + 1
     productsList.push({
       'id': newId,
-      'name': jsonFormatted.name,
-      'price': jsonFormatted.price,
-      'weight': jsonFormatted.weight
+      'name': inputs.name,
+      'price': inputs.price,
+      'weight': inputs.weight
     })
-    fileHandler.write('{"products": ' + JSON.stringify(productsList) + '}')
+    fileHandler.write({'products': productsList})
     return {products: productsList}
   }
 }

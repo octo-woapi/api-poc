@@ -1,6 +1,6 @@
 const http = require('http')
 const products = require('../products/router.js')
-const tools = require('./tools.js')
+const tools = require('./tools/url.js')
 const orders = require('../orders/router')
 
 const server = http.createServer((req, res) => {
@@ -9,9 +9,9 @@ const server = http.createServer((req, res) => {
     params = tools.getParams(url)
   }
   route = tools.getRoute(url)
-  const ressource = route[0]
+  const resource = route[0]
   const id = parseInt(route[1])
-  switch (ressource) {
+  switch (resource) {
     case 'products':
       products(req, res, route, params)
       break

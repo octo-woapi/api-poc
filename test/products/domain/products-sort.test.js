@@ -1,7 +1,7 @@
-const sort = require('../../products/domain/sort')
-const get = require('../../products/usecase/getList')
+const sort = require('../../../products/domain/sort')
+const get = require('../../../products/usecase/getList')
 
-describe('(:property)', () => {
+describe('sort(:property)', () => {
   describe('Products is fine, sorting by price products', () => {
     test('return products sorted by price', () => {
       const fileHandlers = {products: {read: jest.fn(() => {
@@ -29,7 +29,7 @@ describe('(:property)', () => {
           {'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01}]
         }
       })}}
-      const products = get(fileHandlers.products).products
+      const products = get(fileHandlers.products).getList
       expect(products.sort(sort('weight'))).toEqual([
         {'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01},
         {'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2},

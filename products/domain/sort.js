@@ -1,11 +1,4 @@
-function sort (params) {
-  // get fields + tri asc or desc
-  console.log(params)
-  return params
-  // sortBy
-}
-
-function dynamicSort (property) {
+function sort (property) {
   let sortOrder = 1
   if (property[0] === '-') {
     sortOrder = -1
@@ -17,7 +10,4 @@ function dynamicSort (property) {
   }
 }
 
-module.exports = {
-  sort,
-  dynamicSort
-}
+module.exports = sort

@@ -1,12 +1,15 @@
 function isQueryParams (params) {
-  console.log(params)
   if (!params) {
     return false
-  } else if (params.indexOf('sort') !== -1 && params.indexOf('name') !== -1 && params.indexOf('price') !== -1 && params.indexOf('weight') !== -1) {
+  } else if (!params.sort) {
     return false
+  } else if (params.sort !== 'name' && params.sort !== 'price' && params.sort !== 'weight') {
+    throw new InvalidParameterError('Parameter is invalid')
   } else {
     return true
   }
 }
 
-module.exports = isQueryParams
+class InvalidParameterError extends Error {}
+
+module.exports = {isQueryParams, InvalidParameterError}

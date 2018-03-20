@@ -12,4 +12,10 @@ describe('.isNameDefined(:inputs)', () => {
       }).toThrow(InvalidNameError)
     })
   })
+  describe('when inputs.name is defined', () => {
+    it('returns true', () => {
+      const data = {name: 'kiwi'}
+      expect(isValidProduct(data)).toBe(true)
+    })
+  })
 })

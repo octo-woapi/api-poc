@@ -31,10 +31,10 @@ describe('GET /products', () => {
     })
   })
   describe('when id is precise but not existing', () => {
-    it('returns 500', (done) => {
+    it('returns 404', (done) => {
       request({url: `http://localhost:${PORT}/products/3`}, (err, res) => {
         if (err) throw err
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(404)
         done()
       })
     })
@@ -50,72 +50,61 @@ describe('GET /products', () => {
         done()
       })
     })
-    describe('when sort is called with an invalid parameter')
-    it('returns 500', (done) => {
+    it('returns products sorted', (done) => {
+      request({url: `http://localhost:${PORT}/products?sort=weight`}, (err, res) => {
+        if (err) throw err
+        const sortedByWeightProductsList = [{'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01}]
+        expect(JSON.parse(res.body)[0]).toEqual(sortedByWeightProductsList[0])
+        done()
+      })
+    })
+  })
+  describe('when sort is called with an invalid parameter', () => {
+    it('returns 400', (done) => {
       const invalidParameter = 'kake'
       request({url: `http://localhost:${PORT}/products?sort=` + invalidParameter}, (err, res) => {
         if (err) throw err
-        expect(res.statusCode).toBe(500)
+        expect(res.statusCode).toBe(400)
         done()
       })
     })
   })
 })
-/*
-describe('GET /products', () => {
-  test('Return 200 when everything is fine', (done) => {
-    request(`http://localhost:${PORT}/products`, (err, res) => {
-      if (err) throw err
-      expect(res.statusCode).toBe(200)
-      done()
-    })
-  })
-})
 
-describe('GET /products/0', () => {
-  test('Return 200 when everything is fine', (done) => {
-    request.get(`http://localhost:${PORT}/products/0`, (err, res) => {
-      if (err) throw err
-      expect(res.statusCode).toBe(200)
-      done()
-    })
-  })
-  test('getData.getProduct(:id) retrieve the good product', () => {
-    expect(getData.getProduct(0)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
-  })
-  test('Retrieve the first product', (done) => {
-    request.get(`http://localhost:${PORT}/products/0`, (err, res, body) => {
-      if (err) throw err
-      expect(JSON.parse(body)).toEqual({'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2})
-      done()
-    })
-  })
-})
-
-describe('GET /products?sort=name', () => {
-  test('Return 200 when everything is fine', (done) => {
-    request.get(`http://localhost:${PORT}/products?sort=price,name&desc=price`, (err, res) => {
-      if (err) throw err
-      expect(res.statusCode).toBe(200)
-      done()
-    })
-  })
-  /* test('getParams is getting all the params', (done) => {
-    request.get(`http://localhost:${PORT}/products?sort=price`, (err, res) => {
-      if (err) throw err
-      expect(res.query).toBe('{sort:"price"}')
-      done()
-    })
-  })
-})
- describe('Catch missing arguments POST data', () => {
-    test('When name is undefined', (done) => {
-      const testForm = {'price': 10, 'weight': 0.01}
-      request.post({url: `http://localhost:${PORT}/products`, form: testForm}, (err, res) => {
-        if (err) throw err
-        expect(res.statusCode).toEqual(400)
+describe('POST /products', () => {
+  describe('when the format of the productData is invalid', () => {
+    it('returns 400', (done) => {
+      request({url: `http://localhost:${PORT}/products`, method: 'POST', json: {data: 'fake data'}}, (err, res) => {
+        if (err) console.log(err)
+        expect(res.statusCode).toBe(400)
         done()
       })
     })
   })
-}) */
+  describe('when everything is fine', () => {
+    it('adds the products in the list', (done) => {
+      const json = {id: 3, name: 'kiwi', price: 3, weight: 0.2}
+      request({
+        url: `http://localhost:${PORT}/products`,
+        method: 'POST',
+        json: json
+      }, (err, res) => {
+        if (err) console.log(err)
+        expect(res.body.products.pop()).toEqual(json)
+        rewriteJSONAfterTest((err) => {
+          if (err) throw err
+          done()
+        })
+      })
+    })
+  })
+})
+
+function rewriteJSONAfterTest (callback) {
+  const products = [{'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2}, {'id': 1, 'name': 'orange', 'price': 1.5, 'weight': 0.3}, {'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01}]
+  fs.writeFile('/Users/romaincalamier/api-poc/products/data/test.json',
+    JSON.stringify({products: products}), (err) => {
+      if (err) callback(err)
+      callback(null, 'done')
+    })
+}

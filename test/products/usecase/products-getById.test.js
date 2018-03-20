@@ -1,4 +1,4 @@
-const getByIdModule = require('../../products/usecase/getById')
+const getByIdModule = require('../../../products/usecase/getById')
 
 describe(':getById(:id, :fileHandlers)', () => {
   describe('when everything is fine', () => {

@@ -1,9 +1,9 @@
-const fileHandler = require('../../server/fileHandler')
+const fileHandler = require('../../server/tools/fileHandler')
 
 describe(':read(:pathData)', () => {
   describe('When everything fine', () => {
     it('returns JSON from data path', () => {
-      const path = '/Users/romaincalamier/api-poc/products/data-test.json'
+      const path = '/Users/romaincalamier/api-poc/products/test.json'
       const {read} = fileHandler(path)
       expect(read).toBeDefined()
     })

@@ -1,4 +1,4 @@
-const addModule = require('../../products/usecase/add')
+const addModule = require('../../../products/usecase/add')
 
 describe('.add(:fileHandler, :id, :inputs)', () => {
   describe('When everything is fine', () => {
