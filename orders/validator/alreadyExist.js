@@ -1,6 +1,6 @@
 function alreadyExist (fileHandler) {
   return (orderId) => {
-    const orders = fileHandler.read().orders
+    const orders = fileHandler.read()
     if (orders.find((order) => { return order.id === orderId })) return true
     return false
   }

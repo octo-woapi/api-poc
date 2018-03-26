@@ -5,7 +5,7 @@ describe(':getById(:id, :fileHandlers)', () => {
     it('returns the product wanted', () => {
       // Given
       const id = 1
-      const fileHandlers = {products: {read: jest.fn(() => { return {products: [{id: id}]} })}}
+      const fileHandlers = {products: {read: jest.fn(() => { return [{id: id}] })}}
       const {getById} = getByIdModule(fileHandlers.products)
       // When
       const product = getById(id)
@@ -19,7 +19,7 @@ describe(':getById(:id, :fileHandlers)', () => {
       const fileHandlers = {
         products: {
           read: jest.fn(() => {
-            return {products: []}
+            return []
           })
         }
       }

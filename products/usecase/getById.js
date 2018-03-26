@@ -1,6 +1,6 @@
 function getById (fileHandler) {
   return (id) => {
-    const products = fileHandler.read().products
+    const products = fileHandler.read()
     if (!products.find((product) => product.id === id)) {
       throw new ProductNotFoundError(`Porduct with ID:${id} does not exist`)
     }

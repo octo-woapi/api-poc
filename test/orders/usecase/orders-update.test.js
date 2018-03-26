@@ -5,7 +5,7 @@ describe('update(:fileHandler, :orderId, :orderData)', () => {
     it('calls fileHandlers.read', () => {
       const fileHandlers = {
         orders: {
-          read: jest.fn(() => { return {orders: [{id: 1, value: orderData}]} }),
+          read: jest.fn(() => [{id: 1, value: orderData}]),
           write: jest.fn()
         }
       }
@@ -18,7 +18,7 @@ describe('update(:fileHandler, :orderId, :orderData)', () => {
     it('calls fileHandlers.write', () => {
       const fileHandlers = {
         orders: {
-          read: jest.fn(() => { return {orders: [{id: 1, value: orderData}]} }),
+          read: jest.fn(() => [{id: 1, value: orderData}]),
           write: jest.fn()
         }
       }
@@ -34,7 +34,7 @@ describe('update(:fileHandler, :orderId, :orderData)', () => {
       const orders = [JSON.parse(orderData)]
       const fileHandlers = {
         orders: {
-          read: jest.fn(() => { return {orders: [JSON.parse(orderData)]} }),
+          read: jest.fn(() => [JSON.parse(orderData)]),
           write: jest.fn()
         }
       }

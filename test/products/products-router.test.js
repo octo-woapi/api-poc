@@ -24,23 +24,20 @@ describe('GET /products', () => {
     it('return products list', (done) => {
       request({url: `http://localhost:${PORT}/products`}, (err, res) => {
         if (err) throw err
-        expect(JSON.parse(res.body).getList).toEqual(JSON.parse(fs.readFileSync('/Users/romaincalamier' +
-          '/api-poc/products/data/test.json', 'utf-8')).products)
+        expect(JSON.parse(res.body)).toEqual(JSON.parse(fs.readFileSync('/Users/romaincalamier' +
+          '/api-poc/products/data/test.json', 'utf-8')))
         done()
       })
     })
   })
   describe('when id is precise but not existing', () => {
     it('returns 404', (done) => {
-      request({url: `http://localhost:${PORT}/products/3`}, (err, res) => {
+      request({url: `http://localhost:${PORT}/products/5`}, (err, res) => {
         if (err) throw err
         expect(res.statusCode).toBe(404)
         done()
       })
     })
-  })
-  describe('when id is precise and defined', () => {
-
   })
   describe('when sort is called properly', () => {
     it('returns 200', (done) => {
@@ -90,7 +87,7 @@ describe('POST /products', () => {
         json: json
       }, (err, res) => {
         if (err) console.log(err)
-        expect(res.body.products.pop()).toEqual(json)
+        expect(res.body.pop()).toEqual(json)
         rewriteJSONAfterTest((err) => {
           if (err) throw err
           done()
@@ -101,9 +98,14 @@ describe('POST /products', () => {
 })
 
 function rewriteJSONAfterTest (callback) {
-  const products = [{'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2}, {'id': 1, 'name': 'orange', 'price': 1.5, 'weight': 0.3}, {'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01}]
+  const products = [{'id': 0, 'name': 'banana', 'price': 2, 'weight': 0.2}, {
+    'id': 1,
+    'name': 'orange',
+    'price': 1.5,
+    'weight': 0.3
+  }, {'id': 2, 'name': 'vanilla', 'price': 10, 'weight': 0.01}]
   fs.writeFile('/Users/romaincalamier/api-poc/products/data/test.json',
-    JSON.stringify({products: products}), (err) => {
+    JSON.stringify(products), (err) => {
       if (err) callback(err)
       callback(null, 'done')
     })

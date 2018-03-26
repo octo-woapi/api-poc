@@ -1,8 +1,8 @@
 function add (fileHandler) {
   return (orderId, orderData) => {
-    const orders = fileHandler.read().orders
+    const orders = fileHandler.read()
     orders.push({id: orderId, productsList: orderData.productsList})
-    fileHandler.write({orders: orders})
+    fileHandler.write(orders)
     return orders
   }
 }

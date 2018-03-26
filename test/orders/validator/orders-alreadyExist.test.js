@@ -5,7 +5,7 @@ describe(':alreadyExist(:fileHandler, :orderId)', () => {
     it('return true', () => {
       const orderId = 1
       const orders = [{id: 1, productsList: []}]
-      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: orders} })}}
+      const fileHandlers = {orders: {read: jest.fn(() => orders)}}
       const {alreadyExist} = alreadyExistModule(fileHandlers.orders)
       expect(alreadyExist(orderId)).toBe(true)
     })
@@ -14,7 +14,7 @@ describe(':alreadyExist(:fileHandler, :orderId)', () => {
     it('return false', () => {
       const orderId = 2
       const orders = [{id: 1}]
-      const fileHandlers = {orders: {read: jest.fn(() => { return {orders: orders} })}}
+      const fileHandlers = {orders: {read: jest.fn(() => orders)}}
       const {alreadyExist} = alreadyExistModule(fileHandlers.orders)
       expect(alreadyExist(orderId)).toBe(false)
     })

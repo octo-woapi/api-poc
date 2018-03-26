@@ -13,17 +13,17 @@ const conf = require('../server/conf')[env]
 const fileHandlers = {
   products: fileHandler(conf.data.products)
 }
-const getList = require('./usecase/getList.js')(fileHandlers.products)
+const {products} = require('./usecase/getList.js')(fileHandlers.products)
 const {getById} = require('./usecase/getById')(fileHandlers.products)
 const {add} = require('./usecase/add')(fileHandlers.products)
 const {alreadyExist} = require('./validator/alreadyExist')(fileHandlers.products)
 
-function router (req, res, route, params) {
+async function router (req, res, route, params) {
   if (req.method === 'GET') {
     const MORE_PARAMS = 1
     if (route.length <= MORE_PARAMS && !params) {
       res.writeHead(200)
-      return res.end(JSON.stringify(getList))
+      return res.end(JSON.stringify(products))
     }
     let id = parseInt(route[MORE_PARAMS])
     if (isValidId(id)) {
@@ -39,7 +39,7 @@ function router (req, res, route, params) {
     try {
       if (isQueryParams(params)) {
         res.statusCode = 200
-        return res.end(JSON.stringify(getList.getList.sort(sort(params.sort))))
+        return res.end(JSON.stringify(products.sort(sort(params.sort))))
       }
     } catch (errQueryParams) {
       res.statusCode = 400
@@ -47,31 +47,31 @@ function router (req, res, route, params) {
     }
   }
   if (req.method === 'POST') {
-    getData(req, (err, data) => {
-      if (err) {
+    let data
+    try {
+      data = await getData(req)
+    } catch (err) {
+      res.statusCode = 400
+      return res.end()
+    }
+    let id = 1
+    while (alreadyExist(id)) {
+      id += 1
+    }
+    try {
+      const result = addController(id, JSON.parse(data), products, isValidProduct, format, add)
+      res.statusCode = 200
+      return res.end(JSON.stringify(result))
+    } catch (addError) {
+      if (addError instanceof InvalidProductFormat) {
         res.statusCode = 400
-        return res.end()
+        res.end('Product name must be defined')
       } else {
-        let id = 1
-        while (alreadyExist(id)) {
-          id += 1
-        }
-        try {
-          const result = addController(id, JSON.parse(data), getList, isValidProduct, format, add)
-          res.statusCode = 200
-          return res.end(JSON.stringify(result))
-        } catch (addError) {
-          if (addError instanceof InvalidProductFormat) {
-            res.statusCode = 400
-            res.end('Product name must be defined')
-          } else {
-            console.log(addError)
-            res.statusCode = 500
-            res.end()
-          }
-        }
+        console.log(addError)
+        res.statusCode = 500
+        res.end()
       }
-    })
+    }
   }
 }
 

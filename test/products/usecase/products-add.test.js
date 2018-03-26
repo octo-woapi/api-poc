@@ -3,7 +3,7 @@ const addModule = require('../../../products/usecase/add')
 describe('.add(:fileHandler, :id, :inputs)', () => {
   describe('When everything is fine', () => {
     it('return updated list', () => {
-      const beforeAdd = {products: []}
+      const beforeAdd = []
       const inputs = {id: 'fake'}
       const fileHandlers = {
         products: {
@@ -15,14 +15,14 @@ describe('.add(:fileHandler, :id, :inputs)', () => {
       const json = {id: 0, name: undefined, price: undefined, weight: undefined}
       const id = 0
       const afterAdd = add(id, inputs)
-      expect(afterAdd).toEqual({products: [json]})
+      expect(afterAdd).toEqual([json])
     })
     it('calls write', () => {
       const id = 0
       const inputs = {}
       const fileHandlers = {
         products: {
-          read: jest.fn(() => { return { products: [] } }),
+          read: jest.fn(() => []),
           write: jest.fn()
         }
       }

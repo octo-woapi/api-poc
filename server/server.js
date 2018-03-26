@@ -5,7 +5,7 @@ const orders = require('../orders/router')
 
 const server = http.createServer((req, res) => {
   let url = req.url; let params; let route = []
-  if (url.indexOf('?') > 0) {
+  if (url.indexOf('?') !== -1) {
     params = tools.getParams(url)
   }
   route = tools.getRoute(url)

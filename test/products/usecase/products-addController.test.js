@@ -1,6 +1,6 @@
 const {addController, InvalidProductFormatError} = require('../../../products/usecase/addController')
 
-describe('addController(:id, :inputs, getList, isValidProduct, format, add', () => {
+describe('addController(:id, :inputs, usecase, isValidProduct, format, add', () => {
   describe('when product inputs is invalid', () => {
     it('throws InvalidProductFormatError', () => {
       const data = {}

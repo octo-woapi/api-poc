@@ -1,8 +1,7 @@
 function alreadyExist (fileHandler) {
   return (productId) => {
-    const products = fileHandler.read().products
-    if (products.find((product) => { return product.id === productId })) return true
-    return false
+    const products = fileHandler.read()
+    return products.some((product) => product.id === productId)
   }
 }
 

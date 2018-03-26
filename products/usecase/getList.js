@@ -1,9 +1,9 @@
 function getList (fileHandler) {
-  return fileHandler.read().products
+  return fileHandler.read()
 }
 
 module.exports = (fileHandler) => {
   return {
-    getList: getList(fileHandler)
+    products: getList(fileHandler)
   }
 }

@@ -1,5 +1,5 @@
 function getList (fileHandler) {
-  return fileHandler.read().orders
+  return fileHandler.read()
 }
 
 module.exports = (fileHandler) => {

@@ -1,4 +1,4 @@
-const fileHandlers = {orders: {read: jest.fn(() => { return {orders: []} }),
+const fileHandlers = {orders: {read: jest.fn(() => []),
   write: jest.fn()}}
 
 const {add} = require('../../../orders/usecase/add')(fileHandlers.orders)

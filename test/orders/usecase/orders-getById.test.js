@@ -7,9 +7,7 @@ describe(':getById(:id, :fileHandlers)', () => {
       const id = 1
       const fileHandlers = {
         orders: {
-          read: jest.fn(() => {
-            return {orders: [{id: id}]}
-          })
+          read: jest.fn(() => [{id: id}])
         }
       }
       const {getById} = getByIdModule(fileHandlers.orders)
@@ -26,9 +24,7 @@ describe(':getById(:id, :fileHandlers)', () => {
       // Given
       const fileHandlers = {
         orders: {
-          read: jest.fn(() => {
-            return {orders: []}
-          })
+          read: jest.fn(() => [])
         }
       }
       const {getById, OrderNotFoundError} = getByIdModule(fileHandlers.orders)
