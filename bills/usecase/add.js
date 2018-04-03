@@ -1,7 +1,10 @@
 function add (fileHandler) {
-  return (orderId, amount) => {
+  return async (orderId, amount) => {
     const createdAt = new Date()
-    fileHandler.write(createdAt, orderId, amount)
+    const bills = await fileHandler.read()
+    const id = bills.length
+    bills.push({id: id, createdAt: createdAt, orderId: orderId, amount: amount})
+    await fileHandler.write(bills)
   }
 }
 

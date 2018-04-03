@@ -10,7 +10,6 @@ function deleteBill (fileHandler, BillNotFoundError) {
     const index = bills.findIndex((bill) => {
       return bill.id === parseInt(id)
     })
-    console.log(index)
     if (index === -1) {
       throw new BillNotFoundError(`Bill with id ${id} does not exist`)
     }
