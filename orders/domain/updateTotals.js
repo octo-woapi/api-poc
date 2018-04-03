@@ -1,22 +1,18 @@
-function updateTotals (order, getProductById) {
-  if (order.productsList.length < 1) {
+function updateTotals (getProductById) {
+  return (order) => {
+    if (order.productsList.length < 1) {
+      return order
+    }
+    order.weight = 0
+    order.price = 0
+    let productsInfo = order.productsList.map(product => Object.assign(product, getProductById(product.id)))
+    order.weight = (productsInfo.length < 2) ? productsInfo[0].weight * productsInfo[0].quantity : productsInfo.reduce((a, b) => ({weight: a.weight * a.quantity + b.weight * b.quantity}))
+    order.price = (productsInfo.length < 2) ? productsInfo[0].price * productsInfo[0].quantity : productsInfo.reduce((a, b) => ({price: a.price * a.quantity + b.price * b.quantity}))
+    order.shipmentAmount = calculateShippingAmount(order.weight)
+    order.totalAmount = applyDiscount(order.price + order.shipmentAmount)
+    console.log(order)
     return order
   }
-  order.weight = 0
-  let productPrice = 0
-  /*
-  let productsInfo = Array.from(order.productsList, product => { product.id, product.quantity, getProductById(product.id).weight, getProductById(product.id).price })
-  order.weight = Array.reduce(productsInfo.weight)
-  order.price = Array.reduce(productsInfo.price)
-*/
-  for (let productKey in order.productsList) {
-    let productInfo = getProductById(order.productsList[productKey].id)
-    order.weight += productInfo.weight * order.productsList[productKey].quantity
-    productPrice += productInfo.price * order.productsList[productKey].quantity
-  }
-  order.shipmentAmount = calculateShippingAmount(order.weight)
-  order.totalAmount = applyDiscount(productPrice + order.shipmentAmount)
-  return order
 }
 
 function calculateShippingAmount (weight) {
@@ -32,4 +28,8 @@ function applyDiscount (price) {
   return price - price * DISCOUNT
 }
 
-module.exports = updateTotals
+module.exports = (getProductById) => {
+  return {
+    updateTotals: updateTotals(getProductById)
+  }
+}

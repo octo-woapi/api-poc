@@ -1,9 +1,12 @@
 const fs = require('fs')
 
 function write (path) {
-  return (stuffToWrite, callback) => {
-    fs.writeFile(path, JSON.stringify(stuffToWrite), (err) => {
-      if (err) callback(err)
+  return (stuffToWrite) => {
+    return new Promise((resolve, reject) => {
+      fs.writeFile(path, JSON.stringify(stuffToWrite), (err) => {
+        if (err) reject(err)
+        resolve('done')
+      })
     })
   }
 }

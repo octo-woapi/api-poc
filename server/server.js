@@ -2,6 +2,7 @@ const http = require('http')
 const products = require('../products/router.js')
 const tools = require('./tools/url.js')
 const orders = require('../orders/router')
+const bills = require('../bills/router')
 
 const server = http.createServer((req, res) => {
   let url = req.url; let params; let route = []
@@ -17,6 +18,9 @@ const server = http.createServer((req, res) => {
       break
     case 'orders':
       orders(req, res, route, id)
+      break
+    case 'bills':
+      bills(req, res, id)
       break
     default:
       res.write('Hello world')

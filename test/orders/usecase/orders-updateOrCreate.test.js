@@ -9,10 +9,9 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const update = jest.fn()
       const add = jest.fn()
       const format = jest.fn()
-      const getProductById = jest.fn()
       const updateTotalsList = jest.fn()
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       updateOrCreate(orderId, orderData)
       expect(format).toBeCalledWith(orderData)
     })
@@ -24,13 +23,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => true)
       const update = jest.fn(() => orderDataUpdated)
       const add = jest.fn()
-      const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
       const updateTotalsList = jest.fn()
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       updateOrCreate(orderId, orderData)
-      expect(updateTotalsList).toBeCalledWith(orderDataUpdated, getProductById)
+      expect(updateTotalsList).toBeCalledWith(orderDataUpdated)
     })
   })
   describe('When id already exists', () => {
@@ -38,7 +36,6 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const orderId = 1
       const orderData = '{}'
       const alreadyExist = jest.fn()
-      const getProductById = jest.fn()
       const update = jest.fn()
       const add = jest.fn()
       const format = jest.fn()
@@ -46,7 +43,7 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const isValidOrder = jest.fn(() => true)
       // When
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       updateOrCreate(orderId, orderData)
       expect(alreadyExist).toBeCalledWith(orderId)
     })
@@ -56,13 +53,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => true)
       const update = jest.fn()
       const add = jest.fn()
-      const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
       const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => true)
       // When
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       updateOrCreate(orderId, orderData)
       // Then
       expect(update).toBeCalledWith(orderId, orderData)
@@ -74,13 +70,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => true)
       const update = jest.fn(() => [orderDataUpdated])
       const add = jest.fn()
-      const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
       const updateTotalsList = jest.fn(() => [orderDataUpdated])
       const isValidOrder = jest.fn(() => true)
       // When
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       const orders = updateOrCreate(orderId, orderData)
       // Then
       expect(orders).toEqual([orderDataUpdated])
@@ -93,13 +88,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => false)
       const add = jest.fn()
       const update = jest.fn()
-      const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
       const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => true)
       // When
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       updateOrCreate(orderId, orderData)
       // Then
       expect(add).toBeCalledWith(orderId, orderData)
@@ -110,13 +104,12 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => false)
       const update = jest.fn()
       const add = jest.fn(() => 'fake updated order')
-      const getProductById = jest.fn()
       const format = jest.fn(() => orderData)
       const updateTotalsList = jest.fn(() => 'fake updated order')
       const isValidOrder = jest.fn(() => true)
       // When
       const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       const order = updateOrCreate(orderId, orderData)
       // Then
       expect(order).toEqual('fake updated order')
@@ -129,12 +122,11 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       const alreadyExist = jest.fn(() => false)
       const update = jest.fn()
       const add = jest.fn()
-      const getProductById = jest.fn()
       const format = jest.fn()
       const updateTotalsList = jest.fn()
       const isValidOrder = jest.fn(() => false)
       const {updateOrCreate, InvalidOrderFormatError} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList, getProductById)
+        alreadyExist, update, add, format, updateTotalsList)
       expect(() => {
         updateOrCreate(orderId, orderData)
       }).toThrow(InvalidOrderFormatError)

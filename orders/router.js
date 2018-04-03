@@ -1,7 +1,6 @@
 const isValidOrder = require('./validator/isValidOrder')
 const isValidId = require('../server/validator/isValidId')
 const format = require('./domain/format')
-const updateTotalsList = require('./domain/updateTotalsList')
 const fileHandler = require('../server/tools/fileHandler')
 const getData = require('../server/tools/getRequestData')
 
@@ -18,11 +17,13 @@ const {update} = require('./usecase/update')(fileHandlers.orders)
 const {alreadyExist} = require('./validator/alreadyExist')(fileHandlers.orders)
 const getList = require('./usecase/getList')(fileHandlers.orders)
 const {getById} = require('./usecase/getById')(fileHandlers.orders)
-const getProductById = require('../products/usecase/getById')(fileHandlers.products)
+const getProductById = require('../products/usecase/getById')(fileHandlers.products).getById
+const {updateTotals} = require('./domain/updateTotals')(getProductById)
+const {updateTotalsList} = require('./domain/updateTotalsList')(updateTotals)
 const {deleteOrder} = require('./usecase/deleteOrder')(fileHandlers.orders)
 
 const {updateOrCreate, InvalidOrderFormatError} = require('./usecase/updateAndCreate')(isValidOrder,
-  alreadyExist, update, add, format, updateTotalsList, getProductById)
+  alreadyExist, update, add, format, updateTotalsList)
 
 async function router (req, res, route, id) {
   if (req.method === 'PUT' || req.method === 'POST') {
@@ -48,8 +49,7 @@ async function router (req, res, route, id) {
     }
 
     try {
-      const updatedOrders = updateOrCreate(id, data, isValidOrder, alreadyExist,
-        update, add, format, updateTotalsList, getProductById)
+      const updatedOrders = updateOrCreate(id, JSON.parse(data))
       res.statusCode = 200
       res.end(JSON.stringify(updatedOrders))
     } catch (errUpdate) {
