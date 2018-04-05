@@ -1,5 +1,5 @@
 const request = require('request')
-const {startApi, deleteAllOrders, addOrder} = require('../helpers')
+const {startApi, deleteAllOrders, addOrder, deleteAllBills} = require('../helpers')
 const PORT = 3002
 
 const fs = require('fs')
@@ -9,7 +9,7 @@ startApi(PORT)
 describe('Orders', () => {
   beforeEach(async () => {
     await deleteAllOrders()
-    await addOrder(1, {productsList: []})
+    await addOrder(1, {id: 1, productsList: [{id: 1, name: 'orange', quantity: 100}]})
   })
   describe('PUT /orders/1', () => {
     describe('When the order id is not precise', () => {
@@ -73,7 +73,7 @@ describe('Orders', () => {
     describe('when everything is fine', () => {
       it('returns 200', (done) => {
         request({
-          url: `http://localhost:${PORT}/orders/1`,
+          url: `http://localhost:${PORT}/orders`,
           method: 'POST',
           json: {productsList: []}
         }, (err, res) => {
@@ -82,15 +82,31 @@ describe('Orders', () => {
           done()
         })
       })
-      it('adds the product in the list', (done) => {
+      it('adds the order in the list', (done) => {
+        request({
+          url: `http://localhost:${PORT}/orders`,
+          method: 'POST',
+          json: {productsList: [{id: 1, name: 'orange', quantity: 100}]}
+        }, (err, res) => {
+          if (err) console.log(err)
+          console.log(res.body)
+          expect(res.body.slice(-1)[0]).toEqual(JSON.parse(fs.readFileSync('/Users/' +
+            'romaincalamier/api-poc/orders/data/test.json', 'utf-8')).slice(-1)[0])
+          done()
+        })
+      })
+    })
+    describe('when the status is updated from pending to paid', () => {
+      it('creates a new bill of the order', async (done) => {
+        await deleteAllBills()
         request({
           url: `http://localhost:${PORT}/orders/1`,
           method: 'POST',
-          json: {productsList: [{id: 1, name: 'fake data post'}]}
+          json: {productsList: [{id: 1, name: 'fake fruit'}], status: 'paid'}
         }, (err, res) => {
           if (err) console.log(err)
-          expect(res.body.getList).toBe(JSON.stringify(fs.readFileSync('/Users/' +
-            'romaincalamier/api-poc/orders/data/test.json', 'utf-8')).orders)
+          expect(JSON.parse(fs.readFileSync('/Users/' +
+            'romaincalamier/api-poc/bills/data/test.json', 'utf-8'))).toEqual([])
           done()
         })
       })
@@ -102,8 +118,8 @@ describe('Orders', () => {
       it('returns orders', (done) => {
         request({url: `http://localhost:${PORT}/orders`}, (err, res) => {
           if (err) console.log(err)
-          expect(res.body.getList).toBe(JSON.stringify(fs.readFileSync('/Users/' +
-            'romaincalamier/api-poc/orders/data/test.json', 'utf-8')).orders)
+          expect(JSON.parse(res.body).getList).toEqual(JSON.parse(fs.readFileSync('/Users/' +
+            'romaincalamier/api-poc/orders/data/test.json', 'utf-8')))
           done()
         })
       })

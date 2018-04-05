@@ -1,14 +1,15 @@
 function add (fileHandler) {
   return (newId, inputs) => {
-    const productsList = fileHandler.read()
-    productsList.push({
-      'id': newId,
-      'name': inputs.name,
-      'price': inputs.price,
-      'weight': inputs.weight
+    return new Promise((resolve) => {
+      const productsList = fileHandler.read()
+      productsList.push({
+        'id': newId,
+        'name': inputs.name,
+        'price': inputs.price,
+        'weight': inputs.weight
+      })
+      resolve(fileHandler.write(productsList))
     })
-    fileHandler.write(productsList)
-    return productsList
   }
 }
 

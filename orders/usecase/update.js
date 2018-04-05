@@ -1,17 +1,23 @@
-function update (fileHandler) {
+function update (fileHandler, updateTotalsList, createBill) {
   return (orderId, orderData) => {
-    const orders = fileHandler.read()
+    let orders = fileHandler.read()
     const orderIndex = orders.findIndex((order) => {
       return order.id === parseInt(orderId)
     })
-    orders[orderIndex] = {id: orderId, productsList: orderData.productsList}
+    const statusBefore = orders[orderIndex]
+    Object.assign(orders[orderIndex], orderData)
     fileHandler.write(orders)
+    orders = updateTotalsList(orders)
+    if (statusBefore === 'pending' && orderData.status === 'paid') {
+      createBill(orderId)
+      console.log(2)
+    }
     return orders
   }
 }
 
-module.exports = (fileHandler) => {
+module.exports = (fileHandler, updateTotalsList, createBill) => {
   return {
-    update: update(fileHandler)
+    update: update(fileHandler, updateTotalsList, createBill)
   }
 }

@@ -9,21 +9,22 @@ const conf = require('../server/conf')[env]
 
 const fileHandlers = {
   orders: fileHandler(conf.data.orders),
-  products: fileHandler(conf.data.products)
+  products: fileHandler(conf.data.products),
+  bills: fileHandler(conf.data.bills)
 }
 
-const {add} = require('./usecase/add')(fileHandlers.orders)
-const {update} = require('./usecase/update')(fileHandlers.orders)
 const {alreadyExist} = require('./validator/alreadyExist')(fileHandlers.orders)
 const getList = require('./usecase/getList')(fileHandlers.orders)
 const {getById} = require('./usecase/getById')(fileHandlers.orders)
 const getProductById = require('../products/usecase/getById')(fileHandlers.products).getById
 const {updateTotals} = require('./domain/updateTotals')(getProductById)
 const {updateTotalsList} = require('./domain/updateTotalsList')(updateTotals)
+const createBill = require('../bills/usecase/add')(fileHandlers.bills).add
+const {update} = require('./usecase/update')(fileHandlers.orders, updateTotalsList, createBill)
+const {add} = require('./usecase/add')(fileHandlers.orders, updateTotalsList)
 const {deleteOrder} = require('./usecase/deleteOrder')(fileHandlers.orders)
-
 const {updateOrCreate, InvalidOrderFormatError} = require('./usecase/updateAndCreate')(isValidOrder,
-  alreadyExist, update, add, format, updateTotalsList)
+  alreadyExist, update, add, format)
 
 async function router (req, res, route, id) {
   if (req.method === 'PUT' || req.method === 'POST') {
@@ -31,7 +32,7 @@ async function router (req, res, route, id) {
     try {
       data = await getData(req)
     } catch (err) {
-      res.writeHead(400)
+      res.statusCode = 400
       res.end(err)
     }
 

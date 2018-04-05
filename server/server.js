@@ -5,11 +5,11 @@ const orders = require('../orders/router')
 const bills = require('../bills/router')
 
 const server = http.createServer((req, res) => {
-  let url = req.url; let params; let route = []
+  let url = req.url; let params
   if (url.indexOf('?') !== -1) {
     params = tools.getParams(url)
   }
-  route = tools.getRoute(url)
+  const route = tools.getRoute(url)
   const resource = route[0]
   const id = parseInt(route[1])
   switch (resource) {

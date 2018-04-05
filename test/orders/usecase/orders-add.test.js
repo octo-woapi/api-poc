@@ -1,7 +1,8 @@
 const fileHandlers = {orders: {read: jest.fn(() => []),
   write: jest.fn()}}
+const updateTotalsList = jest.fn((orders) => orders)
 
-const {add} = require('../../../orders/usecase/add')(fileHandlers.orders)
+const {add} = require('../../../orders/usecase/add')(fileHandlers.orders, updateTotalsList)
 
 describe(':add(orderId, orderData, orders)', () => {
   describe('When everything fine', () => {
@@ -10,10 +11,10 @@ describe(':add(orderId, orderData, orders)', () => {
       add(orderId, '{}')
       expect(fileHandlers.orders.write).toBeCalled()
     })
-    it('returns orders updated', () => {
+    it('returns orders added', () => {
       const orderId = 1
-      const orderData = {id:1, productsList: []}
-      const orders = [{id: orderId, productsList: orderData.productsList}]
+      const orderData = {id: 1, productsList: []}
+      const orders = [{id: orderId, productsList: orderData.productsList, status: 'pending'}]
       expect(add(orderId, orderData)).toEqual(orders)
     })
   })

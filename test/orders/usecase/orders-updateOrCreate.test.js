@@ -15,21 +15,6 @@ describe('updateOrCreate(:orderId, :orderData, :alreadyExist, :update, :add, ' +
       updateOrCreate(orderId, orderData)
       expect(format).toBeCalledWith(orderData)
     })
-    it('calls updateTotalsList with updated orders', () => {
-      const orderId = 1
-      const orderData = '{}'
-      const orderDataUpdated = 'updated fake data'
-      const isValidOrder = jest.fn(() => true)
-      const alreadyExist = jest.fn(() => true)
-      const update = jest.fn(() => orderDataUpdated)
-      const add = jest.fn()
-      const format = jest.fn(() => orderData)
-      const updateTotalsList = jest.fn()
-      const {updateOrCreate} = require('../../../orders/usecase/updateAndCreate')(isValidOrder,
-        alreadyExist, update, add, format, updateTotalsList)
-      updateOrCreate(orderId, orderData)
-      expect(updateTotalsList).toBeCalledWith(orderDataUpdated)
-    })
   })
   describe('When id already exists', () => {
     it('calls alreadyExists with orderId and orders', () => {

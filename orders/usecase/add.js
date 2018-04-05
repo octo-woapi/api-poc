@@ -1,14 +1,14 @@
-function add (fileHandler) {
+function add (fileHandler, updateTotalsList) {
   return (orderId, orderData) => {
     const orders = fileHandler.read()
-    orders.push({id: orderId, productsList: orderData.productsList})
-    fileHandler.write(orders)
-    return orders
+    orders.push({id: orderId, productsList: orderData.productsList, status: 'pending'})
+    fileHandler.write(updateTotalsList(orders))
+    return updateTotalsList(orders)
   }
 }
 
-module.exports = (fileHandler) => {
+module.exports = (fileHandler, updateTotalsList) => {
   return {
-    add: add(fileHandler)
+    add: add(fileHandler, updateTotalsList)
   }
 }

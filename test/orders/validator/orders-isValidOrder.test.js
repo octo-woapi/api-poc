@@ -11,7 +11,7 @@ describe('isValidOrder(:orderData)', () => {
     it('returns false', () => {
       const orderData = {
         id: 1,
-        productsList: 'falsy productsList'
+        productsList: ['falsy productsList']
       }
       expect(isValidOrder(orderData)).toBe(false)
     })
@@ -24,7 +24,7 @@ describe('isValidOrder(:orderData)', () => {
   })
   describe('when everything is fine', () => {
     it('returns true', () => {
-      const orderData = {'id': 1, 'productsList': []}
+      const orderData = {id: 1, productsList: [{id: 1, name: 'orange', quantity: 100}]}
       expect(isValidOrder(orderData)).toBe(true)
     })
   })

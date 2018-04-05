@@ -10,7 +10,6 @@ function updateTotals (getProductById) {
     order.price = (productsInfo.length < 2) ? productsInfo[0].price * productsInfo[0].quantity : productsInfo.reduce((a, b) => ({price: a.price * a.quantity + b.price * b.quantity}))
     order.shipmentAmount = calculateShippingAmount(order.weight)
     order.totalAmount = applyDiscount(order.price + order.shipmentAmount)
-    console.log(order)
     return order
   }
 }
