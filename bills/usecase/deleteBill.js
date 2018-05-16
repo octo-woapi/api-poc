@@ -1,11 +1,7 @@
-module.exports = (fileHandler, BillNotFoundError) => {
-  return {
-    deleteBill: deleteBill(fileHandler, BillNotFoundError)
-  }
-}
+class BillNotFoundError extends Error {}
 
-function deleteBill (fileHandler, BillNotFoundError) {
-  return (id) => {
+function deleteBill (fileHandler) {
+  return async (id) => {
     let bills = fileHandler.read()
     const index = bills.findIndex((bill) => {
       return bill.id === parseInt(id)
@@ -14,7 +10,14 @@ function deleteBill (fileHandler, BillNotFoundError) {
       throw new BillNotFoundError(`Bill with id ${id} does not exist`)
     }
     bills.splice(index, 1)
-    fileHandler.write(bills)
+    await fileHandler.write(bills)
     return bills
+  }
+}
+
+module.exports = (fileHandler) => {
+  return {
+    deleteBill: deleteBill(fileHandler),
+    BillNotFoundError
   }
 }

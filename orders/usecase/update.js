@@ -1,23 +1,22 @@
-function update (fileHandler, updateTotalsList, createBill) {
-  return (orderId, orderData) => {
+function update(fileHandler, updateTotalsList, createBill, deleteBill) {
+  return async (orderId, orderData) => {
     let orders = fileHandler.read()
-    const orderIndex = orders.findIndex((order) => {
+    const orderIndex = orders.findIndex(order => {
       return order.id === parseInt(orderId)
     })
-    const statusBefore = orders[orderIndex]
+    const statusBefore = orders[orderIndex].status
     Object.assign(orders[orderIndex], orderData)
-    fileHandler.write(orders)
     orders = updateTotalsList(orders)
+    await fileHandler.write(orders)
     if (statusBefore === 'pending' && orderData.status === 'paid') {
-      createBill(orderId)
-      console.log(2)
+      await createBill(orderId)
     }
     return orders
   }
 }
 
-module.exports = (fileHandler, updateTotalsList, createBill) => {
+module.exports = (fileHandler, updateTotalsList, createBill, deleteBill) => {
   return {
-    update: update(fileHandler, updateTotalsList, createBill)
+    update: update(fileHandler, updateTotalsList, createBill, deleteBill)
   }
 }

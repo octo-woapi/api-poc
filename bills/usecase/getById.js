@@ -1,4 +1,6 @@
-function getById (fileHandler, BillNotFoundError) {
+class BillNotFoundError extends Error {}
+
+function getById (fileHandler) {
   return (id) => {
     const bills = fileHandler.read()
     if (!bills.find((bill) => bill.id === id)) {
@@ -8,8 +10,9 @@ function getById (fileHandler, BillNotFoundError) {
   }
 }
 
-module.exports = (fileHandler, BillNotFoundError) => {
+module.exports = (fileHandler) => {
   return {
-    getById: getById(fileHandler, BillNotFoundError)
+    getById: getById(fileHandler),
+    BillNotFoundError
   }
 }
