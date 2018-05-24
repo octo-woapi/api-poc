@@ -8,8 +8,8 @@ function format (newOrderData) {
     totalAmount: DEFAULT_TOTAL_AMOUNT,
     weight: DEFAULT_WEIGHT
   }
-
-  return Object.assign(defaultOrder, newOrderData);
+  const response = Object.assign(defaultOrder, newOrderData)
+  return response
 }
 
 module.exports = format

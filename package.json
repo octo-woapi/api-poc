@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=test jest test",
-    "start": "node index.js"
+    "start": "node index.js",
+    "watch": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +28,7 @@
     "bail": true
   },
   "dependencies": {
+    "nodemon": "^1.17.4",
     "url": "^0.11.0"
   }
 }

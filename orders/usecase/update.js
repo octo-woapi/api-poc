@@ -1,4 +1,4 @@
-function update(fileHandler, updateTotalsList, createBill, deleteBill) {
+function update(fileHandler, updateTotalsList, createBill) {
   return async (orderId, orderData) => {
     let orders = fileHandler.read()
     const orderIndex = orders.findIndex(order => {

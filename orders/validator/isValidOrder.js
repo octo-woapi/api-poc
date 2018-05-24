@@ -1,7 +1,7 @@
 function isProductListValid (productsList) {
   return productsList.every((product) => {
-    if (product.name && product.quantity) {
-      if (product.id) return typeof product.id === 'number'
+    if (product.product.name && product.quantity) {
+      if (product.product.id) return typeof product.product.id === 'number'
     }
     return false
   })
