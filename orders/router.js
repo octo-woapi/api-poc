@@ -12,7 +12,7 @@ const fileHandlers = {
 }
 
 const alreadyExist = require('../server/validator/alreadyExist')
-const getList = require('./usecase/getList')(fileHandlers.orders)
+const getList = require('./usecase/getList')
 const {getById} = require('./usecase/getById')(fileHandlers.orders)
 const getProductById = require('../products/usecase/getById')(fileHandlers.products).getById
 const {updateTotals} = require('./domain/updateTotals')(getProductById)
@@ -26,6 +26,13 @@ const {
 } = require('./usecase/updateAndCreate')(fileHandlers.orders, isValidOrder, alreadyExist, update, add, format)
 
 async function router(req, res, route, id) {
+  console.log(req.method)
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+  res.setHeader("Access-Control-Allow-Methods", "*")
+  if (req.method === 'OPTIONS') {
+    res.end()
+  }
   if (req.method === 'POST') {
     const addOrder = await add()
     res.statusCode = 200
@@ -44,7 +51,6 @@ async function router(req, res, route, id) {
       res.end(err)
     }
     try {
-      console.log(1)
       const updatedOrders = await updateOrCreate(id, JSON.parse(data))
       console.log(updatedOrders)
       res.statusCode = 200
@@ -67,13 +73,14 @@ async function router(req, res, route, id) {
       }
     }
     res.statusCode = 200
-    res.end(JSON.stringify(getList.getList  ))
+    res.end(JSON.stringify(getList(fileHandlers.orders).getList))
   }
   if (req.method === 'DELETE') {
     if (isValidId(id)) {
-      deleteOrder(id)
+      const orders = await deleteOrder(id)
+      console.log(orders)
       res.statusCode = 204
-      res.end()
+      res.end(JSON.stringify(orders))
     }
   }
 }

@@ -24,6 +24,9 @@ const { add } = require("./usecase/add")(
 );
 
 async function router(req, res, route, params) {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type")
+  res.setHeader("Access-Control-Allow-Methods", "*")
   if (req.method === "GET") {
     const MORE_PARAMS = 1;
     if (route.length <= MORE_PARAMS && !params) {

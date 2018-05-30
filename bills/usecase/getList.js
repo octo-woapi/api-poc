@@ -2,8 +2,8 @@ function getList (fileHandler) {
   return fileHandler.read()
 }
 
-module.exports = (fileHandler) => {
+module.exports = () => {
   return {
-    getList: getList(fileHandler)
+    getList
   }
 }

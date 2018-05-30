@@ -21,6 +21,7 @@
   "homepage": "https://github.com/octo-woapi/api-poc#readme",
   "devDependencies": {
     "jest": "^22.4.3",
+    "nodemon": "^1.17.5",
     "request": "^2.86.0"
   },
   "jest": {
@@ -28,7 +29,6 @@
     "bail": true
   },
   "dependencies": {
-    "nodemon": "^1.17.4",
     "url": "^0.11.0"
   }
 }
